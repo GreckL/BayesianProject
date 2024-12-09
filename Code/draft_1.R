@@ -1,4 +1,4 @@
-###
+### Load libraries
 library("bayesmeta")
 library("baggr")
 
