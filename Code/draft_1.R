@@ -165,7 +165,7 @@ for (n in 2:nstud) {    # Number of studies (meta analysis so start from 2 up to
     # Get row names containing "theta_k"
     theta_k_rows <- fit_summary_df[grep("theta_k", rownames(fit_summary)), ]
     
-    theta_MSE <- (theta_k_rows$mean-1)^2
+    theta_MSE <- (theta_k_rows$mean-theta_context)^2
     BAY_MSE <- sum(unlist(theta_MSE))/n
     MSE_hat = MSE_hat*((s-1)/s) + BAY_MSE*(1/s) #Average over simulations
     #*BAY_Nstud_MSE[i] <- sum(BAY_MSE)/n
@@ -222,7 +222,7 @@ print(p)
 ### Two groups
 
 s=1         # Number of simulations
-nstud = 40   # Maximum number of studies
+nstud = 20   # Maximum number of studies
 theta_simul <- c()  #Simulate data set
 theta_context <- c() #Simulate data set !NEW! Varying "true" ATE for each observation
 sigma_simul <- c()  #Simulate data set
@@ -255,13 +255,13 @@ for (n in 2:nstud) {    # Number of studies (meta analysis so start from 2 up to
     # Frequentist
     weighted_num = sum(theta_simul %*% sigma_simul)
     weighted_dem = sum(sigma_simul)
-    MLE_est[i]<- weighted_num/weighted_dem#sum(theta_simul)
+    MLE_est[i]<- weighted_num/weighted_dem #sum(theta_simul)
     
     # Bayesian
     df_pooled = data.frame("tau"= theta_simul,
                            "se" = sigma_simul)
     ## Using partial pooling from Bayesian bagger
-    bg <- baggr(df_pooled, model="rubin", pooling = "partial")
+    bg <- baggr(df_pooled, model="rubin", pooling="partial", iter=2000, chains=1)
     # Extract the Stan fit object
     fit_object <- bg$fit
     # Get the summary table from the Stan fit object
@@ -270,7 +270,7 @@ for (n in 2:nstud) {    # Number of studies (meta analysis so start from 2 up to
     fit_summary_df <- as.data.frame(fit_summary)
     # Get row names containing "theta_k"
     theta_k_rows <- fit_summary_df[grep("theta_k", rownames(fit_summary)), ]
-    theta_MSE <- (theta_k_rows$mean-1)^2
+    theta_MSE <- (theta_k_rows$mean-theta_context)^2
     BAY_MSE <- sum(unlist(theta_MSE))/n
     MSE_hat = MSE_hat*((s-1)/s) + BAY_MSE*(1/s)
     #*BAY_Nstud_MSE[i] <- sum(BAY_MSE)/n
@@ -321,12 +321,21 @@ p <- ggplot(df_long, aes(x = x, y = Value, color = Series, group = Series)) +
 x11()
 print(p)
 
+### Posterior distribution plot
+effect_plot(bg)
+
+### We can compare all three supported Bayesian Analysis in one graph
+# my_baggr_comparison <- baggr_compare(df)
+#plot(my_baggr_comparison) + 
+#  ggtitle("8 schools: model comparison")
 
 
 ### Things to modify:
 # Hyperpriors
 # Data Generating Model: Variance assumptions etc. 
-# 
+# Speed!
+# Graphs for output
+# For context: compare partial baggr with
 
 
 
