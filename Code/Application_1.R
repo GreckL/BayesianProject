@@ -278,3 +278,23 @@ for (n in 2:nstud) {    # Number of studies (meta analysis so start from 2 up to
 
 # Plot the MSEs to compare
 df <- data.frame(x=1:nstud, MLE_MSE, MSE_BAY)
+
+
+
+################ 
+#
+
+
+
+yi_apl = c()
+sei_apl = c()
+dataset = baggr(data)
+
+
+# Bayesian
+
+
+# 
+res <- rma(yi, sei, data=dataset, method="REML")
+predict(res)$pred
+
