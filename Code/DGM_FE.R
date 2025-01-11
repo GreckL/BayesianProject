@@ -42,7 +42,7 @@ for (n in seq(2, nstud, by = 1))  {
     # Frequentist
     weighted_num = sum(theta_simul %*% sigma_simul)
     weighted_dem = sum(sigma_simul)
-    MLE_est[i]<- weighted_num/weighted_dem#sum(theta_simul)
+    MLE_est[i]<- weighted_num/weighted_dem #sum(theta_simul)
     
     # Bayesian
     df_pooled = data.frame("tau"= theta_simul,
@@ -59,7 +59,7 @@ for (n in seq(2, nstud, by = 1))  {
     theta_k_rows <- fit_summary_df[grep("theta_k", rownames(fit_summary)), ]
     theta_MSE <- (theta_k_rows$mean-1)^2
     BAY_MSE <- sum(unlist(theta_MSE))/n
-    MSE_hat = MSE_hat*((s-1)/s) + BAY_MSE*(1/s)
+    MSE_hat = MSE_hat*((i-1)/i) + BAY_MSE*(1/i)
     #*BAY_Nstud_MSE[i] <- sum(BAY_MSE)/n
     print(i)
   }
@@ -83,11 +83,6 @@ dflong <- df %>%
 p <- ggplot(dflong, aes(x = x, y = Value, color = Series, group = Series)) +
   geom_line(size = 1.2) +   # Thicker lines
   geom_point(size = 2) +    # Points
-  # Remove or comment out the geom_text layer:
-  # geom_text(aes(label = round(Value, 1)), 
-  #           vjust = -0.7, hjust = 0.7, 
-  #           size = 3.5, family = "sans", color = "black",
-  #           check_overlap = TRUE) +
   theme_minimal(base_family = "sans") +
   theme(
     text = element_text(size = 11),
