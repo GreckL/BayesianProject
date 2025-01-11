@@ -153,26 +153,6 @@ PriorComp=baggr_compare("Prior A"=PriorP1,
               compare = "effects", plot=TRUE)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ############## Situation 3: DGM s.t. Random Effects Model with group ATE #######
 
 ### Two groups
